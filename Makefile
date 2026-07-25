@@ -12,6 +12,9 @@ ci: fmt-check license-check lint test
 clean:
 	rm -f whack
 
+deps: ui-deps
+	go mod download
+
 fix: fmt license-fix
 
 fmt:
@@ -46,6 +49,9 @@ test:
 
 ui-build:
 	make -C frontend build
+
+ui-deps:
+	make -C frontend deps
 
 ui-run:
 	make -C frontend run
