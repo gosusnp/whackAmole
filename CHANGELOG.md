@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5](https://github.com/gosusnp/whackamole/compare/v0.1.4...v0.1.5) (2026-07-28)
+
+
+### Features
+
+* add whack mcp install-claude-code ([0882c6e](https://github.com/gosusnp/whackamole/commit/0882c6eb1dce8d6fc33ccb77e735c409e713bfc7))
+
 ## [0.1.4](https://github.com/gosusnp/whackamole/compare/v0.1.3...v0.1.4) (2026-03-20)
 
 
