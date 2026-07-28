@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/gosusnp/whackamole/internal"
 	"github.com/gosusnp/whackamole/internal/db"
@@ -24,8 +25,52 @@ var mcpCmd = &cobra.Command{
 	},
 }
 
+var mcpServeCmd = &cobra.Command{
+	Use:   "serve",
+	Short: "Start the MCP server (alias for 'whack mcp')",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return startMCPServer(cmd)
+	},
+}
+
+var mcpInstallClaudeCodeCmd = &cobra.Command{
+	Use:   "install-claude-code",
+	Short: "Register whack's MCP server with Claude Code",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return installClaudeCode(cmd)
+	},
+}
+
 func init() {
+	mcpCmd.AddCommand(mcpServeCmd)
+	mcpCmd.AddCommand(mcpInstallClaudeCodeCmd)
 	rootCmd.AddCommand(mcpCmd)
+}
+
+func installClaudeCode(cmd *cobra.Command) error {
+	whackPath, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("failed to resolve whack executable path: %w", err)
+	}
+
+	claudePath, err := exec.LookPath("claude")
+	if err != nil {
+		return fmt.Errorf("claude CLI not found in PATH: %w", err)
+	}
+
+	serverArgs := []string{"mcp", "serve"}
+	if cmd.Flags().Changed("database") {
+		serverArgs = append(serverArgs, "--database", getDBPath(cmd))
+	}
+	addArgs := append([]string{"mcp", "add", "whackamole", "--", whackPath}, serverArgs...)
+	install := exec.Command(claudePath, addArgs...)
+	install.Stdout = cmd.OutOrStdout()
+	install.Stderr = cmd.ErrOrStderr()
+	if err := install.Run(); err != nil {
+		return fmt.Errorf("failed to register whack with Claude Code: %w", err)
+	}
+
+	return nil
 }
 
 func startMCPServer(cmd *cobra.Command) error {

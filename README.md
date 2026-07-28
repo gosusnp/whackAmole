@@ -66,7 +66,9 @@ whack ui --port 9000 # use a different port
 
 ## 🤖 Agent Configuration
 
-`whackAmole` exposes a standard MCP server (`whack mcp`). Any MCP-compatible client can connect using `command: whack` and `args: ["mcp"]`.
+`whackAmole` exposes a standard MCP server (`whack mcp`, also available as `whack mcp serve`). Any MCP-compatible client can connect using `command: whack` and `args: ["mcp"]`.
+
+**Claude Code**: run `whack mcp install-claude-code` to register the server automatically (requires the `claude` CLI on your `PATH`). Pass `--database <path>` to pin it to a specific database; otherwise it resolves the database the normal way at launch time.
 
 **Claude Desktop** (`claude_desktop_config.json`):
 
